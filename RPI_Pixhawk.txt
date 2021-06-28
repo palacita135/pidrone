@@ -14,6 +14,7 @@ enable_uart=1
 start_x=1
 gpu_mem=128
 
+#LCD 7 Inch touchscreen waveshare
 max_usb_current=1
 hdmi_group=2
 hdmi_mode=87
