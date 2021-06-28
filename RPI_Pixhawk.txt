@@ -47,8 +47,11 @@ DRONEKIT
 sudo apt-get update
 sudo apt-get upgrade
 sudo pip install dronekit
+sudo pip install dronekit-sitl
 
 mavproxy.py --master=/dev/ttyAMA0
+
+python (filename) --connect /dev/ttyAMA0
 
 GIT
 sudo apt-get update
