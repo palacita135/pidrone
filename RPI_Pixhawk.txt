@@ -1,0 +1,83 @@
+Raspi
+sudo apt-get update && sudo apt-get dist-upgrade -y
+sudo rpi-update
+sudo rpi-eeprom-update -a
+
+sudo raspi-config (disable uart - enable serial port)
+ls /dev/ttyAMA0
+sudo nano /boot/config.txt
+
+[all]
+#dtoverlay=vc4-fkms-v3d
+dtoverlay-disable-bt
+enable_uart=1
+start_x=1
+gpu_mem=128
+
+max_usb_current=1
+hdmi_group=2
+hdmi_mode=87
+hdmi_cvt 1024 600 60 6 0 0 0
+hdmi_drive=1
+
+sudo reboot
+
+MAVLProxy(python3)
+sudo apt-get install python3-dev python3-opencv python3-wxgtk4.0 python3-pip python3-matplotlib python3-lxml python3-pygame
+
+pip3 install PyYAML mavproxy --user
+
+echo "export PATH=$PATH:$HOME/.local/bin" >> ~/.bashrc
+
+pip3 install mavproxy --user --upgrade
+pip3 install mavproxy --user git+https://github.com/ArduPilot/mavproxy.git@master
+
+MAVLProxy(python2)
+sudo apt-get install python-dev python-opencv python-wxgtk4.0 python-pip python-matplotlib python-lxml python-pygame
+
+pip install PyYAML mavproxy --user
+
+echo "export PATH=$PATH:$HOME/.local/bin" >> ~/.bashrc
+
+pip install mavproxy --user --upgrade
+pip install mavproxy --user git+https://github.com/ArduPilot/mavproxy.git@master
+
+DRONEKIT
+sudo apt-get update
+sudo apt-get upgrade
+sudo pip install dronekit
+
+mavproxy.py --master=/dev/ttyAMA0
+
+GIT
+sudo apt-get update
+sudo apt-get install git
+
+git config --global user.name "Johar Palacita"
+git config --global user.email "palacita.concept@gmail.com"
+
+ROS
+sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu buster main" > /etc/apt/sources.list.d/ros-noetic.list'
+cat /etc/apt/sources.list.d/ros-noetic.list.
+sudo apt-key adv --keyserver 'hkp://keyserver.ubuntu.com:80' --recv-key C1CF6E31E6BADE8868B172B4F42ED6FBAB17C654
+sudo apt update
+sudo apt-get install -y python-rosdep python-rosinstall-generator python-wstool python-rosinstall build-essential cmake
+sudo rosdep init
+cat /etc/ros/rosdep/sources.list.d/20-default.list
+rosdep update
+
+mkdir ~/ros_catkin_ws
+cd ~/ros_catkin_ws
+
+rosinstall_generator ros_comm --rosdistro noetic --deps --wet-only --tar > noetic-ros_comm-wet.rosinstall
+wstool init src noetic-ros_comm-wet.rosinstall
+rosdep install -y --from-paths src --ignore-src --rosdistro noetic -r --os=debian:buster
+
+sudo dphys-swapfile swapoff
+sudoedit /etc/dphys-swapfile
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --install-space /opt/ros/noetic -j1 -DPYTHON_EXECUTABLE=/usr/bin/python3
+
+source /opt/ros/noetic/setup.bash
+roscore
