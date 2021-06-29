@@ -46,6 +46,8 @@ pip install mavproxy --user git+https://github.com/ArduPilot/mavproxy.git@master
 DRONEKIT
 sudo apt-get update
 sudo apt-get upgrade
+sudo pip install pymavlink
+sudo pip install mavproxy
 sudo pip install dronekit
 sudo pip install dronekit-sitl
 
