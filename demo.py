@@ -10,8 +10,11 @@ args = parser.parse_args()
 
 # Connect to the Vehicle
 print 'Connecting to pidrone2 on: %s' % args.connect
-vehicle = connect(args.connect, baud=921600, wait_ready=True)
-#921600 is the baudrate that you have set in the mission plannar or qgc
+vehicle = connect(args.connect, baud=57600, wait_ready=True)
+#57600 is the baudrate that you have set in the mission plannar or qgc
+#SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
+#SERIAL2_BAUD = 57 so the flight controller can communicate with the RPi at 57600 baud.
+#LOG_BACKEND_TYPE = 3 if you are using APSync to stream the dataflash log files to the RPi
 
 # Function to arm and then takeoff to a user specified altitude
 def arm_and_takeoff(aTargetAltitude):
@@ -20,7 +23,7 @@ def arm_and_takeoff(aTargetAltitude):
   # Don't let the user try to arm until autopilot is ready
   while not vehicle.is_armable:
     print " Waiting for pidrone2 to initialise..."
-    time.sleep(120)
+    time.sleep(5)
         
   print "Arming motors"
   # Copter should arm in GUIDED mode
@@ -43,8 +46,8 @@ def arm_and_takeoff(aTargetAltitude):
       break
     time.sleep(1)
 
-# Initialize the takeoff sequence to 15m
-arm_and_takeoff(15)
+# Initialize the takeoff sequence to 10m
+arm_and_takeoff(10)
 
 print("Take off complete")
 
