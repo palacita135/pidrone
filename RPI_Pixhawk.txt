@@ -1,11 +1,14 @@
-Raspi
+Raspberry Pi
+
 sudo apt-get update && sudo apt-get dist-upgrade -y
 sudo rpi-update
 sudo rpi-eeprom-update -a
 
-sudo raspi-config (disable uart - enable serial port)
+sudo raspi-config (disable uart - enable serial port, enable camera, enable ssh)
 ls /dev/ttyAMA0
+
 sudo nano /boot/config.txt
+#Go to the bottom line then copy paste, after finish ctrl+X then Yes then hit Enter
 
 [all]
 #dtoverlay=vc4-fkms-v3d
@@ -14,14 +17,30 @@ enable_uart=1
 start_x=1
 gpu_mem=128
 
-#LCD 7 Inch touchscreen waveshare
+#LCD 7 Inch touchscreen waveshare setup
 max_usb_current=1
 hdmi_group=2
 hdmi_mode=87
 hdmi_cvt 1024 600 60 6 0 0 0
 hdmi_drive=1
 
+#setup wifi
+sudo nano /etc/wpa_supplicant/wpa_supplicant.conf
+network={
+    ssid="testing"
+    psk="testingPassword"
+}
+
 sudo reboot
+
+###############################################################################################################################
+
+GIT
+sudo apt-get update
+sudo apt-get install git
+
+git config --global user.name "Johar Palacita"
+git config --global user.email "palacita.concept@gmail.com"
 
 MAVLProxy(python3)
 sudo apt-get install python3-dev python3-opencv python3-wxgtk4.0 python3-pip python3-matplotlib python3-lxml python3-pygame
@@ -54,13 +73,6 @@ sudo pip install dronekit-sitl
 
 mavproxy.py --master=/dev/ttyAMA0
 python (filename) --connect /dev/ttyAMA0
-
-GIT
-sudo apt-get update
-sudo apt-get install git
-
-git config --global user.name "Johar Palacita"
-git config --global user.email "palacita.concept@gmail.com"
 
 ROS For Raspberry Pi
 sudo sh -c 'echo "deb http://packages.ros.org/ros/ubuntu buster main" > /etc/apt/sources.list.d/ros-noetic.list'
