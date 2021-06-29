@@ -9,7 +9,7 @@ sudo nano /boot/config.txt
 
 [all]
 #dtoverlay=vc4-fkms-v3d
-dtoverlay-disable-bt
+dtoverlay=disable-bt
 enable_uart=1
 start_x=1
 gpu_mem=128
