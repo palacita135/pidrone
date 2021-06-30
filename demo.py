@@ -5,7 +5,7 @@ import time
 # Set up option parsing to get connection string
 import argparse  
 parser = argparse.ArgumentParser()
-parser.add_argument('--connect', default='/dev/ttyAMA0')
+parser.add_argument('--connect', default='127.0.0.1:14550')
 args = parser.parse_args()
 
 # Connect to the Vehicle
