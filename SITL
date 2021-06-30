@@ -1,3 +1,4 @@
+SITL map console
 step 1 terminal 1
 dronekit-sitl copter
 
@@ -6,3 +7,25 @@ mavproxy.py --master tcp:127.0.0.1:5760 --sitl 127.0.0.1:5501 --out 127.0.0.1:14
 
 step 3 terminal 3
 python (filename) --connect 127.0.0.1:14550
+
+SITL GAZEBO
+step 1 open gazebo runway world
+gazebo --verbose ~/ardupilot_gazebo/worlds/iris_arducopter_runway.world
+
+step 2 open console to connect gazebo
+cd ~/ardupilot/ArduCopter/
+sim_vehicle.py -v ArduCopter -f gazebo-iris --console
+
+step 3 (optional) open new terminal to give command
+cd ~/ardupilot/ArduCopter
+sim_vehicle.py -w
+
+step 4 (optional) open Qgc to control plane
+
+step 5 open new terminal and run the script
+python (filename)
+
+reference
+https://github.com/punkypankaj/Installing-ArduPilot-directory/blob/main/docs.md
+https://github.com/punkypankaj/Installing-Gazebo-and-ArduPilot-Plugin/blob/main/Docs.md
+https://www.theconstructsim.com/how-to-install-ros-on-ubuntu/
