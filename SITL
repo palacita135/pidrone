@@ -16,6 +16,24 @@ step 2 open console to connect gazebo
 cd ~/ardupilot/ArduCopter/
 sim_vehicle.py -v ArduCopter -f gazebo-iris --console
 
+#cd /path/to/PX4-Autopilot
+#make px4_sitl gazebo
+#For the full list of build targets run make px4_sitl list_vmd_make_targets (and filter on those that start with gazebo_).
+
+#LIST :
+Quadrotor	- make px4_sitl gazebo
+Quadrotor with Optical Flow	- make px4_sitl gazebo_iris_opt_flow
+3DR Solo (Quadrotor)	- make px4_sitl gazebo_solo
+Typhoon H480 (Hexrotor) (supports video streaming)	- make px4_sitl gazebo_typhoon_h480
+Standard Plane	- make px4_sitl gazebo_plane
+Standard Plane (with catapult launch)	- make px4_sitl gazebo_plane_catapult
+Standard VTOL	- make px4_sitl gazebo_standard_vtol
+Tailsitter VTOL	- make px4_sitl gazebo_tailsitter
+Ackerman vehicle (UGV/Rover)	- make px4_sitl gazebo_rover
+HippoCampus TUHH (UUV: Unmanned Underwater Vehicle)	- make px4_sitl gazebo_uuv_hippocampus
+Boat (USV: Unmanned Surface Vehicle)	- make px4_sitl gazebo_boat
+Cloudship (Airship)	- make px4_sitl gazebo_cloudship
+
 step 3 (optional) open new terminal to give command
 cd ~/ardupilot/ArduCopter
 sim_vehicle.py -w
