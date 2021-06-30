@@ -1,0 +1,57 @@
+https://www.pcmag.com/how-to/how-to-turn-a-raspberry-pi-into-a-nas-for-whole-home-file-sharing
+
+Install Raspbian OS
+sudo fdisk -l
+#if you're using a terminal over SSH, you'll have to run:
+umount /dev/sda1
+#Depending on the drive, you may need to also run umount /dev/sda2, umount /dev/sda3, and so on, depending on how many partitions are on the drive from previous usage.
+#Then, to erase and format your flash drive for Linux usage, run:
+sudo parted /dev/sda
+
+mklabel gpt
+
+#If prompted to erase the drive, type y and press Enter. Then run:
+
+mkpart
+MyExternalDrive
+ext4
+0%
+100%
+quit
+
+#Next, we'll need to format that partition. If your drive is located at /dev/sda, the new partition will be located at /dev/sda1 (if the drive is /dev/sdb, you'll use /dev/sdb1, and so on):
+
+sudo mkfs.ext4 /dev/sda1
+
+#Press y and Enter when asked if you want to proceed. Then run:
+
+sudo e2label /dev/sda1 MyExternalDrive
+
+sudo shutdown -r now
+
+sudo chown -R pi /media/pi/MyExternalDrive
+
+sudo apt update
+sudo apt upgrade
+sudo apt install samba samba-common
+
+sudo nano /etc/samba/smb.conf
+[MyMedia]
+path = /media/pi/MyExternalDrive/
+writeable = yes
+create mask = 0775
+directory mask = 0775
+public=no
+
+Ctrl+X Yes Enter
+
+sudo smbpasswd -a pi
+sudo systemctl restart smbd
+
+Access Your Media
+And everything should be ready to rock. Head to your Windows PC, open a File Explorer window
+and type \\raspberrypi\MyMedia in the address bar (replacing MyMedia with whatever your share is called).
+If you press Enter, you should be able to enter your Samba username (pi) and password and see your shared drive.
+If you run into trouble, you might have to use the Pi's IP address, like \\192.168.1.10\MyMedia instead.
+
+To connect on a Mac, open Finder and click Go > Connect to Server, typing in smb://raspberrypi when prompted.
