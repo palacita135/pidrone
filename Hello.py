@@ -1,6 +1,8 @@
+from __future__ import print_function
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 from pymavlink import mavutil
-#from __future__ import print_function
+
+import math
 import time
 import sys
 import os
@@ -15,7 +17,7 @@ args = parser.parse_args()
 connection_string = args.connect
 
 # Connect to the Vehicle
-print ("Connecting to pidrone2 on: %s" % args.connect)
+print ('Connecting to pidrone4 on: %s' % args.connect)
 vehicle = connect(args.connect, baud=57600, wait_ready=True)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
@@ -23,7 +25,7 @@ vehicle = connect(args.connect, baud=57600, wait_ready=True)
 #LOG_BACKEND_TYPE = 3 if you are using APSync to stream the dataflash log files to the RPi
 # vehicle is an instance of the Vehicle class
 print ("Autopilot Firmware version: %s" % vehicle.version)
-print ("Autopilot capabilities (supports ftp): %s" % vehicle.capabilities.ftp)
+#print ("Autopilot capabilities (supports ftp): %s" % vehicle.capabilities.ftp)
 print ("Global Location: %s" % vehicle.location.global_frame)
 print ("Global Location (relative altitude): %s" % vehicle.location.global_relative_frame)
 print ("Local Location: %s" % vehicle.location.local_frame) #NED
@@ -48,11 +50,11 @@ print ("Armed: %s" % vehicle.armed) # settable
 # Function to arm and then takeoff to a user specified altitude
 def arm_and_takeoff(aTargetAltitude):
 
-  print ("Basic pre-arm checks...DON'T TOUCH!!!")
+  print ("Pre-arm checks...DON'T TOUCH!!!")
   # Don't let the user try to arm until autopilot is ready
   while not vehicle.is_armable:
-    print ("Waiting for pidrone2 to initialise...")
-    time.sleep(1)
+    print ("Waiting for pidrone4 to initialise...")
+    time.sleep(5)
         
   print ("Arming Motors")
   # Copter should arm in GUIDED mode
@@ -63,7 +65,7 @@ def arm_and_takeoff(aTargetAltitude):
     print ("Waiting for arming...")
     time.sleep(1)
 
-  print ("Taking off")
+  print ("Taking Off")
   vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
 
   # Check that vehicle has reached takeoff altitude
@@ -75,33 +77,39 @@ def arm_and_takeoff(aTargetAltitude):
       break
     time.sleep(1)
 
+
+  
 #------ MAIN PROGRAM ----
 # Initialize the takeoff sequence to 10m
 arm_and_takeoff(10)
 
-#-- set the default speed
-vehicle.airspeed = 3
-
 print ("Take off complete")
 
-# Hover for 30 seconds
+#-- set the default speed
+print ("Set Target airspeed to 7")
+vehicle.airspeed = 7
+
+# Hover for 3 seconds
+time.sleep(3)
+
+#-- Go to wp1 
+print ("Go To Waypoint 1")
+wp1 = LocationGlobalRelative(-35.36218282, 149.16513866, 10)
+vehicle.simple_goto(wp1)
+
 time.sleep(30)
 
-#-- Go to wp1
-#print ("go to wp1")
-#wp1 = LocationGlobalRelative(LAT, LON, ALT)
+#-- Go to wp2
+print ("Go To Waypoint 2")
+wp2 = LocationGlobalRelative(-35.36235129, 149.16425743, 10)
+vehicle.simple_goto(wp2)
 
-#vehicle.simple_goto(wp1)
-
-#--- Hover....
-#time.sleep(30)
+time.sleep(30)
 
 #--- Return To Launch
-#print "Return To Home"
-#vehicle.mode = VehicleMode("RTL")
-
-print ("Landing Position")
-vehicle.mode = VehicleMode("LAND")
+print ("Return To Home")
+vehicle.mode = VehicleMode("RTL")
 
 # Close vehicle object
+print ("Mission Complete")
 vehicle.close()
