@@ -62,10 +62,10 @@ def arm_and_takeoff(aTargetAltitude):
 
   # Check that vehicle has reached takeoff altitude
   while True:
-    print (" Altitude: ", vehicle.location.global_relative_frame.alt)
+    print ("Altitude:", vehicle.location.global_relative_frame.alt)
     #Break and return from function just below target altitude.        
     if vehicle.location.global_relative_frame.alt >= aTargetAltitude * 0.95: 
-      print "Reached target altitude"
+      print ("Reached target altitude")
       break
     time.sleep(1)
 
@@ -75,6 +75,7 @@ arm_and_takeoff(10)
 print ("Take off complete")
 
 # Hover for 10 seconds
+print ("Hover For 10s")
 time.sleep(10)
 
 print ("Now let's land")
