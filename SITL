@@ -5,7 +5,9 @@ dronekit-sitl copter
 step 2 terminal 2
 mavproxy.py --master tcp:127.0.0.1:5760 --sitl 127.0.0.1:5501 --out 127.0.0.1:14550 --out 127.0.0.1:14551 --map
 
-step 3 terminal 3
+step 3 (optional) open Qgc to control plane
+
+step 4 terminal 3
 python (filename) --connect 127.0.0.1:14550
 
 SITL GAZEBO
@@ -37,8 +39,6 @@ Cloudship (Airship)	- make px4_sitl gazebo_cloudship
 step 3 (optional) open new terminal to give command
 cd ~/ardupilot/ArduCopter
 sim_vehicle.py -w
-
-step 4 (optional) open Qgc to control plane
 
 step 5 open new terminal and run the script
 python (filename)
