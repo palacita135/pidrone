@@ -53,3 +53,10 @@ http://gazebosim.org/tutorials?tut=install_other_linux&cat=install
 http://gazebosim.org/tutorials?tut=install_ubuntu&cat=install
 https://docs.px4.io/master/en/dev_setup/building_px4.html
 https://docs.px4.io/master/en/dev_setup/dev_env_linux_ubuntu.html
+
+MAP AND CONSOLE SIMULATION
+step 1 terminal 1
+sim_vehicle.py -v ArduCopter --map --console
+
+step 2 terminal 2
+pyhton (script.py)
