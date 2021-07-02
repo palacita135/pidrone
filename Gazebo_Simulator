@@ -1,0 +1,100 @@
+#Default installation: one-liner
+curl -sSL http://get.gazebosim.org | sh
+
+gazebo
+
+#Alternative installation: step-by-step
+#Setup your computer to accept software from packages.osrfoundation.org.
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+
+#You can check to see if the file was written correctly. For example, in Ubuntu Bionic (18.04), you can type:
+#cat /etc/apt/sources.list.d/gazebo-stable.list
+#And if everything is correct, you should see:
+#deb http://packages.osrfoundation.org/gazebo/ubuntu-stable bionic main
+
+#Setup keys
+wget https://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+
+#Install Gazebo.
+#First update the debian database:
+sudo apt-get update
+
+#Hint: make sure the apt-get update process ends without any errors, the console output ends in Done similar to below:
+
+$ sudo apt-get update
+...
+Hit http://ppa.launchpad.net bionic/main Translation-en
+Ign http://us.archive.ubuntu.com bionic/main Translation-en_US
+Ign http://us.archive.ubuntu.com bionic/multiverse Translation-en_US
+Ign http://us.archive.ubuntu.com bionic/restricted Translation-en_US
+Ign http://us.archive.ubuntu.com bionic/universe Translation-en_US
+Reading package lists... Done
+Next install gazebo-11 by:
+
+sudo apt-get install gazebo11
+# For developers that work on top of Gazebo, one extra package
+sudo apt-get install libgazebo11-dev
+If you see the error below:
+
+$ sudo apt-get install gazebo11
+Reading package lists... Done
+Building dependency tree
+Reading state information... Done
+E: Unable to locate package gazebo11
+It's possible the version of Gazebo you are looking for is not supported on the version of OS you are using. For example, installing gazebo11 on Ubuntu Xenial (16.04) will produce the error above. Hint: Take a look at "Project Status" section at http://gazebosim.org/#status, next to each version is the supported ubuntu versions and ROS versions.
+
+Check your installation
+
+gazebo
+
+#########################################################################################################################
+
+#Debian
+
+    curl -ssL http://get.gazebosim.org | sh
+
+#If you prefer manual installations, Gazebo in Debian Sid is available as an official package in Debian Sid (the Gazebo team is the official maintainer in Debian) which usually hosts the latest gazebo release.
+#Install Gazebo9
+
+sudo apt-get install gazebo9
+
+# For developers that works on top of Gazebo, one extra package
+sudo apt-get install libgazebo9-dev
+
+#Gazebo in Debian stretch is provided by the packages.osrfoundation.org repository.
+
+    sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/debian-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+    wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+    sudo apt-get update
+    sudo apt-get install gazebo9
+    # For developers that work on top of Gazebo, one extra package
+    sudo apt-get install libgazebo9-dev
+
+#Fedora
+
+Rawhide is usually hosting one of the latest releases
+Fedora 27: gazebo-8.1.1
+Fedora 26: gazebo-8.0.0
+Install Gazebo sudo yum install gazebo # For developers that works on top of Gazebo, one extra package sudo yum install gazebo-devel
+
+#Arch
+#Install Gazebo
+
+yaourt -S gazebo
+
+# or
+sudo packer -S gazebo
+
+#Gentoo
+
+emerge --ask app-portage/gentoolkit
+  equery uses gazebo -a
+
+#Install Gazebo on stable branch
+
+echo "sci-electronics/gazebo" >> /etc/portage/package.accept_keywords
+emerge gazebo
+
+#Install Gazebo on testing branch
+
+emerge gazebo
