@@ -119,3 +119,48 @@ sudo src/catkin/bin/catkin_make_isolated --install -DCMAKE_BUILD_TYPE=Release --
 
 source /opt/ros/noetic/setup.bash
 roscore
+#########################################################################################################################################################
+
+https://docs.px4.io/master/en/dev_setup/dev_env_linux_ubuntu.html
+
+#Download PX4 Sorce Code
+git clone https://github.com/PX4/PX4-Autopilot.git --recursive
+bash ./PX4-Autopilot/Tools/setup/ubuntu.sh
+
+#Raspberry Pi
+wget https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/setup/ubuntu.sh
+wget https://raw.githubusercontent.com/PX4/PX4-Autopilot/master/Tools/setup/requirements.txt
+
+bash ubuntu.sh --no-nuttx --no-sim-tools
+
+#GCC (armhf)
+sudo apt-get install -y gcc-8-arm-linux-gnueabihf g++-8-arm-linux-gnueabihf
+
+sudo update-alternatives --install /usr/bin/arm-linux-gnueabihf-gcc arm-linux-gnueabihf-gcc /usr/bin/arm-linux-gnueabihf-8 100 --slave /usr/bin/arm-linux-gnueabihf-g++ arm-linux-gnueabihf-g++ /usr/bin/arm-linux-gnueabihf-g++-8
+sudo update-alternatives --config arm-linux-gnueabihf-gcc
+
+#GCC (aarch64)
+sudo apt-get install -y gcc-8-aarch64-linux-gnu g++-8-aarch64-linux-gnu
+sudo update-alternatives --install /usr/bin/aarch64-linux-gnu-gcc aarch64-linux-gnu-gcc /usr/bin/aarch64-linux-gnu-gcc-8 100 --slave /usr/bin/aarch64-linux-gnu-g++ aarch64-linux-gnu-g++ /usr/bin/aarch64-linux-gnu-g++-8
+sudo update-alternatives --config aarch64-linux-gnu-gcc
+
+#Clang (optional)
+cd <PATH-TO-PX4-SRC>
+mkdir build/px4_raspberrypi_default_clang
+cd build/px4_raspberrypi_default_clang
+cmake \
+-G"Unix Makefiles" \
+-DCONFIG=px4_raspberrypi_default \
+-UCMAKE_C_COMPILER \
+-DCMAKE_C_COMPILER=clang \
+-UCMAKE_CXX_COMPILER \
+-DCMAKE_CXX_COMPILER=clang++ \
+../..
+make
+
+#ROS/Gazebo
+wget https://raw.githubusercontent.com/PX4/Devguide/master/build_scripts/ubuntu_sim_ros_melodic.sh
+
+bash ubuntu_sim_ros_melodic.sh
+
+##############################################################################################################################
