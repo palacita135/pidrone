@@ -1,0 +1,46 @@
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+sudo apt update
+
+The plugin we will be using works with gazebo versions 7 to 9. 
+We recommend gazebo9 as the new development will append on this version. 
+It isn’t available for older versions of Ubuntu though, 
+so you may need to use an earlier version depending on your system.
+
+sudo apt install gazebo9 libgazebo9-dev
+
+check the installation by launching Gazebo.
+
+gazebo --verbose
+
+Plugin installation
+We will be using khancyr plugin for the following exaplation. 
+First clone it somewhere in your home directory.
+
+git clone https://github.com/khancyr/ardupilot_gazebo
+cd ardupilot_gazebo
+mkdir build
+cd build
+cmake ..
+make -j4
+
+Modify the -j flag according to your processor. 
+If you do not know the number of cores in your processor, 
+you can find it by typing nproc.
+
+sudo make install
+
+echo 'source /usr/share/gazebo/setup.sh' >> ~/.bashrc
+
+echo 'export GAZEBO_MODEL_PATH=~/ardupilot_gazebo/models' >> ~/.bashrc
+
+. ~/.bashrc
+
+Run Simulator
+gazebo --verbose ~/ardupilot_gazebo/worlds/iris_arducopter_runway.world 
+
+launch SITL
+launch sitl in other terminal
+
+ cd ~/ardupilot/ArduCopter/
+ sim_vehicle.py -v ArduCopter -f gazebo-iris --console
