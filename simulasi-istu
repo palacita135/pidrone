@@ -1,0 +1,6 @@
+MAP AND CONSOLE SIMULATION
+step 1 terminal 1
+sim_vehicle.py -v ArduCopter --map --console
+
+step 2 terminal 2
+pyhton (script.py)
