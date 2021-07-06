@@ -1,0 +1,25 @@
+SITL GAZEBO
+step 1 open gazebo runway world
+gazebo --verbose ~/ardupilot_gazebo/worlds/iris_arducopter_runway.world
+
+step 2 open console to connect gazebo and give the command (example : arm throttle)
+cd ~/ardupilot/ArduCopter/
+sim_vehicle.py -v ArduCopter -f gazebo-iris --console
+
+step 5 open new terminal and run the script
+python (filename)
+example: python demo.py
+
+#LIST :
+Quadrotor	- make px4_sitl gazebo
+Quadrotor with Optical Flow	- make px4_sitl gazebo_iris_opt_flow
+3DR Solo (Quadrotor)	- make px4_sitl gazebo_solo
+Typhoon H480 (Hexrotor) (supports video streaming)	- make px4_sitl gazebo_typhoon_h480
+Standard Plane	- make px4_sitl gazebo_plane
+Standard Plane (with catapult launch)	- make px4_sitl gazebo_plane_catapult
+Standard VTOL	- make px4_sitl gazebo_standard_vtol
+Tailsitter VTOL	- make px4_sitl gazebo_tailsitter
+Ackerman vehicle (UGV/Rover)	- make px4_sitl gazebo_rover
+HippoCampus TUHH (UUV: Unmanned Underwater Vehicle)	- make px4_sitl gazebo_uuv_hippocampus
+Boat (USV: Unmanned Surface Vehicle)	- make px4_sitl gazebo_boat
+Cloudship (Airship)	- make px4_sitl gazebo_cloudship
