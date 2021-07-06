@@ -25,14 +25,14 @@ print ("Attitude: %s" % vehicle.attitude)
 print ("Velocity: %s" % vehicle.velocity)
 print ("GPS: %s" % vehicle.gps_0)
 print ("Groundspeed: %s" % vehicle.groundspeed)
-#print ("Airspeed: %s" % vehicle.airspeed)
+print ("Airspeed: %s" % vehicle.airspeed)
 print ("Gimbal status: %s" % vehicle.gimbal)
 print ("Battery: %s" % vehicle.battery)
 print ("EKF OK?: %s" % vehicle.ekf_ok)
 print ("Last Heartbeat: %s" % vehicle.last_heartbeat)
-#print ("Rangefinder: %s" % vehicle.rangefinder)
-#print ("Rangefinder distance: %s" % vehicle.rangefinder.distance)
-#print ("Rangefinder voltage: %s" % vehicle.rangefinder.voltage)
+print ("Rangefinder: %s" % vehicle.rangefinder)
+print ("Rangefinder distance: %s" % vehicle.rangefinder.distance)
+print ("Rangefinder voltage: %s" % vehicle.rangefinder.voltage)
 print ("Heading: %s" % vehicle.heading)
 print ("Is Armable?: %s" % vehicle.is_armable)
 print ("System status: %s" % vehicle.system_status.state)
@@ -42,19 +42,19 @@ print ("Armed: %s" % vehicle.armed) # settable
 # Function to arm and then takeoff to a user specified altitude
 def arm_and_takeoff(aTargetAltitude):
 
-  print ("Basic Pre-Arm Checks")
+  print ("Basic pre-arm checks")
   # Don't let the user try to arm until autopilot is ready
   while not vehicle.is_armable:
-    print ("Waiting for pidrone to initialise...")
+    print ("Waiting for pidrone4 to initialise...")
     time.sleep(1)
         
-  print ("Arming Motors")
+  print ("Arming motors")
   # Copter should arm in GUIDED mode
   vehicle.mode    = VehicleMode("GUIDED")
   vehicle.armed   = True
 
   while not vehicle.armed:
-    print ("Waiting For Arming...")
+    print ("Waiting for arming...")
     time.sleep(1)
 
   print ("Taking Off")
@@ -62,7 +62,7 @@ def arm_and_takeoff(aTargetAltitude):
 
   # Check that vehicle has reached takeoff altitude
   while True:
-    print ("Altitude:"), vehicle.location.global_relative_frame.alt
+    print (" Altitude:"), vehicle.location.global_relative_frame.alt
     #Break and return from function just below target altitude.        
     if vehicle.location.global_relative_frame.alt >= aTargetAltitude * 0.95: 
       print ("Reached target altitude")
@@ -72,15 +72,28 @@ def arm_and_takeoff(aTargetAltitude):
 # Initialize the takeoff sequence to 10m
 arm_and_takeoff(10)
 
-print ("Take Off Complete")
+print ("Take off complete")
 
 # Hover for 10 seconds
 print ("Hover For 10s")
-time.sleep(10)
+for i in range(10, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
+    time.sleep(1) #selang waktu 10 sampe 1
+    print(' waktu hover: '+ str(i))
 
 print ("Now let's land")
 vehicle.mode = VehicleMode("LAND")
+while True:
+    vehicle.location.global_relative_frame.alt is not 0.5
+    print(" Altitude: %s" % vehicle.location.global_relative_frame.alt)
+    if vehicle.location.global_relative_frame.alt <= 0.5 : #patokan untuk menuju vehicle.close
+        print("congratulation! mission done")
+        break
+    time.sleep(1)
+
+#--- Return To Launch
+#print ("Return To Home")
+#vehicle.mode = VehicleMode("RTL")
 
 # Close vehicle object
-print ("Mission Complete")
+#print ("Mission Complete")
 vehicle.close()
