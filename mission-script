@@ -200,7 +200,7 @@ while True:
     nextwaypoint=vehicle.commands.next
     print(' Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
     time.sleep(1)
-    if vehicle.location.global_frame=point2: #dummy waypoint untuk pulang ke rumah
+    if vehicle.commands.next==3: #dummy waypoint untuk turun deket point 2
         print('turun dulu bentar')
         break
 
