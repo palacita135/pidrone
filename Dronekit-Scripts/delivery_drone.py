@@ -204,7 +204,7 @@ vehicle.mode = VehicleMode("AUTO")
 
 while True:
     nextwaypoint=vehicle.commands.next
-    print(' Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
+    print('Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
     time.sleep(1)
     if vehicle.commands.next==3: #dummy waypoint untuk turun deket point 2
         print('Land and Drop')
@@ -214,7 +214,7 @@ print("Switch mode to LAND")
 vehicle.mode = VehicleMode("LAND")
 
 while True:
-    print(' altitude: %s' % (vehicle.location.global_relative_frame.alt))
+    print('altitude: %s' % (vehicle.location.global_relative_frame.alt))
     time.sleep(1)
     if vehicle.location.global_relative_frame.alt <= 1:
         vehicle.mode = VehicleMode("ALT_HOLD")
