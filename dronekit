@@ -1,0 +1,16 @@
+"""
+NOTE: be sure to be using the latest dronekit. 
+
+sudo pip uninstall dronekit
+sudo pip uninstall pymavlink
+
+git clone https://github.com/palacita/dronekit-python.git
+cd dronekit-python
+git pull
+
+sudo python setup.py build
+sudo python setup.py install
+
+Be sure the RASPI CAMERA driver is correctly acivated -> type the following
+modprobe bcm2835-v4l2 
+"""
