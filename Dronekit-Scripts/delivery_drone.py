@@ -214,7 +214,7 @@ print("Switch mode to LAND")
 vehicle.mode = VehicleMode("LAND")
 
 while True:
-    print('altitude: %s' % (vehicle.location.global_relative_frame.alt))
+    print('Altitude: %s' % (vehicle.location.global_relative_frame.alt))
     time.sleep(1)
     if vehicle.location.global_relative_frame.alt <= 1:
         vehicle.mode = VehicleMode("ALT_HOLD")
@@ -277,7 +277,7 @@ while True:
 
 while True:
     nextwaypoint=vehicle.commands.next
-    print(' Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
+    print('Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
     time.sleep(1)
     if vehicle.commands.next==6: #dummy waypoint untuk pulang ke rumah
         print('Time To Go Home')
@@ -289,7 +289,7 @@ print("Switch mode to RTL")
 vehicle.mode = VehicleMode("RTL") #default altitude rtl 15m
 while True:
     vehicle.location.global_relative_frame.alt is not 0.5
-    print(" Return to home, Altitude: %s" % vehicle.location.global_relative_frame.alt)
+    print("Return to home, Altitude: %s" % vehicle.location.global_relative_frame.alt)
     if vehicle.location.global_relative_frame.alt <= 0.5 : #patokan untuk menuju vehicle.close
         print("Landed")
         print("DISARMING MOTORS")
@@ -297,7 +297,7 @@ while True:
     time.sleep(1)
 
 #Close vehicle object before exiting script
-print("congratulation! Mission Complete")
+print("Congratulation! Mission Complete")
 vehicle.close()
 
 # Shut down simulator if it was started.
