@@ -15,7 +15,6 @@ unzip opencv.zip
 
 wget -O opencv_contrib.zip https://github.com/Itseez/opencv_contrib/archive/3.4.0.zip
 unzip opencv_contrib.zip
-unzip opencv_contrib.zip
 
 cd ~/opencv-3.4.0/
 mkdir build
