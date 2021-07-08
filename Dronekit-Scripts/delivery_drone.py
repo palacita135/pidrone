@@ -292,7 +292,8 @@ while True:
     vehicle.location.global_relative_frame.alt is not 0.5
     print(" Return to home, Altitude: %s" % vehicle.location.global_relative_frame.alt)
     if vehicle.location.global_relative_frame.alt <= 0.5 : #patokan untuk menuju vehicle.close
-        print("Return To Home")
+        print("Landed")
+        print("DISARMING MOTORS")
         break
     time.sleep(1)
 
