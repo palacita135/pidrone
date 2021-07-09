@@ -9,7 +9,7 @@ parser.add_argument('--connect', default='127.0.0.1:14550')
 args = parser.parse_args()
 
 # Connect to the Vehicle
-print ('Connecting to pidrone4 on: %s' % args.connect)
+print ('Connecting to pidrone on: %s' % args.connect)
 vehicle = connect(args.connect, baud=57600, wait_ready=True)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 #(the default) to enable MAVLink 2 on the serial port.
@@ -45,7 +45,7 @@ def arm_and_takeoff(aTargetAltitude):
   print ("Basic pre-arm checks")
   # Don't let the user try to arm until autopilot is ready
   while not vehicle.is_armable:
-    print ("Waiting for pidrone4 to initialise...")
+    print ("Waiting for pidrone to initialise...")
     time.sleep(1)
         
   print ("Arming motors")
@@ -62,26 +62,26 @@ def arm_and_takeoff(aTargetAltitude):
 
   # Check that vehicle has reached takeoff altitude
   while True:
-    print (" Altitude:"), vehicle.location.global_relative_frame.alt
+    print ("Altitude:"), vehicle.location.global_relative_frame.alt
     #Break and return from function just below target altitude.        
     if vehicle.location.global_relative_frame.alt >= aTargetAltitude * 0.95: 
       print ("Reached target altitude")
       break
     time.sleep(1)
 
-# Initialize the takeoff sequence to 10m
-arm_and_takeoff(10)
+# Initialize the takeoff sequence to 15m
+arm_and_takeoff(15)
 
 print ("Take off complete")
 
-# Hover for 10 seconds
+# Hover for 20 seconds
 print ("Hover For 10s")
-for i in range(10, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
+for i in range(20, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
     time.sleep(1) #selang waktu 10 sampe 1
     print(' waktu hover: '+ str(i))
 
 print ("Now let's land")
-vehicle.mode = VehicleMode("LAND")
+vehicle.mode = VehicleMode("RTL")
 while True:
     vehicle.location.global_relative_frame.alt is not 0.5
     print(" Altitude: %s" % vehicle.location.global_relative_frame.alt)
@@ -90,10 +90,5 @@ while True:
         break
     time.sleep(1)
 
-#--- Return To Launch
-#print ("Return To Home")
-#vehicle.mode = VehicleMode("RTL")
-
 # Close vehicle object
-#print ("Mission Complete")
 vehicle.close()
