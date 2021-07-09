@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 
 """
-© Copyright 2015-2016, 3D Robotics.
-mission_basic.py: Example demonstrating basic mission operations including creating, clearing and monitoring missions.
-Full documentation is provided at http://python.dronekit.io/examples/mission_basic.html
+© Copyright 2021, LaBru Systems.
+drone_cargo.py Multorotor scripts
 """
+
 from __future__ import print_function
 
 from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal, Command
+from pymavlink import mavutil
 import time
 import math
-from pymavlink import mavutil
+import numpy as np 
+import psutil
+import copy 
 
 #Set up option parsing to get connection string
 import argparse  
@@ -29,9 +32,8 @@ if not connection_string:
     sitl = dronekit_sitl.start_default()
     connection_string = sitl.connection_string()
 
-
 # Connect to the Vehicle
-print('Connecting to pidrone on: %s' % connection_string)
+print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
@@ -123,14 +125,14 @@ def download_mission():
 
 
 
-def adds_locations(aLocation): #tampat input point/target lokasi
+def adds_locations(aLocation): #target locations
     """
     Adds a takeoff command and four waypoint commands to the current mission. 
     The waypoints are positioned to form a square of side length 2*aSize around the specified LocationGlobal (aLocation).
     The function assumes vehicle.commands matches the vehicle mission state 
     (you must have called download at least once in the session and after clearing the mission)
     """	
-
+    
     cmds = vehicle.commands
 
     print("Clear any existing commands")
@@ -146,17 +148,12 @@ def adds_locations(aLocation): #tampat input point/target lokasi
     point1 = LocationGlobalRelative(-35.36357529, 149.16338038, 10)
     point2 = LocationGlobalRelative(-35.36141183, 149.16321976, 10)
     point3 = LocationGlobalRelative(-35.36158468, 149.16399057, 10)
-    point4 = LocationGlobalRelative(-35.36217136, 149.16508900, 10)
-    point5 = LocationGlobalRelative(-35.36259044, 149.16513399, 10)
-    point6 = LocationGlobalRelative(-35.36286776, 149.16567571, 10)
+    
     #cmds.add(command(0, 0, 0, target component,seq,frame,command,current,autocontionue,param1,param2,param3,param4                 ,     x     ,     y     ,z ))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, 10)) #angka terakhir altitude target
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, 10))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, 10))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point4.lat, point4.lon, 10))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point5.lat, point5.lon, 10))
-    cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point6.lat, point6.lon, 0))    
-
+    
     print("Upload new commands to vehicle")
     cmds.upload()
 
@@ -174,7 +171,7 @@ def arm_and_takeoff(aTargetAltitude):
 
         
     print("Arming Motors")
-    # Copter should arm in GUIDED mode
+    # VTOL should arm in QLOITER mode
     print("Switch mode To GUIDED")
     vehicle.mode = VehicleMode("GUIDED")
     vehicle.armed = True
@@ -281,38 +278,9 @@ for i in range(5, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya,
 
 print('Fly')
 
-print("Starting Mission 2")
-# Reset mission set to first (0) waypoint
-vehicle.commands.next=2 #target waypoint
-
-# Set mode to AUTO to start mission
-print("Switch mode to AUTO")
-vehicle.mode = VehicleMode("AUTO")
-
-# Monitor mission. 
-# Demonstrates getting and setting the command number 
-# Uses distance_to_current_waypoint(), a convenience function for finding the 
-#   distance to the next waypoint.
-'''
-while True:
-    if distance_to_current_waypoint <= 1:
-        vehicle.commands.next=distance_to_current_waypoint
-        print("menuju point selanjutnya")
-        break
-    time.sleep(1)'''
-
-while True:
-    nextwaypoint=vehicle.commands.next
-    print('Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
-    time.sleep(1)
-    if vehicle.commands.next==6: #dummy waypoint untuk pulang ke rumah
-        print('Time To Go Home')
-        break
-    time.sleep(1)
-
 print('Return to launch')
 print("Switch mode to RTL")
-vehicle.mode = VehicleMode("RTL") #default altitude rtl 15m
+vehicle.mode = VehicleMode("SMART_RTL") #default altitude rtl 15m
 while True:
     vehicle.location.global_relative_frame.alt is not 0.5
     print("Return to home, Altitude: %s" % vehicle.location.global_relative_frame.alt)
