@@ -33,7 +33,33 @@ if not connection_string:
 # Connect to the Vehicle
 print('Connecting to vehicle on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True)
-
+#57600 is the baudrate that you have set in the mission plannar or qgc
+#SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
+#SERIAL2_BAUD = 57 so the flight controller can communicate with the RPi at 57600 baud.
+#LOG_BACKEND_TYPE = 3 if you are using APSync to stream the dataflash log files to the RPi
+# vehicle is an instance of the Vehicle class
+print ("Autopilot Firmware version: %s" % vehicle.version)
+#print ("Autopilot capabilities (supports ftp): %s" % vehicle.capabilities.ftp)
+print ("Global Location: %s" % vehicle.location.global_frame)
+print ("Global Location (relative altitude): %s" % vehicle.location.global_relative_frame)
+print ("Local Location: %s" % vehicle.location.local_frame) #NED
+print ("Attitude: %s" % vehicle.attitude)
+print ("Velocity: %s" % vehicle.velocity)
+print ("GPS: %s" % vehicle.gps_0)
+print ("Groundspeed: %s" % vehicle.groundspeed)
+print ("Airspeed: %s" % vehicle.airspeed)
+#print ("Gimbal status: %s" % vehicle.gimbal)
+print ("Battery: %s" % vehicle.battery)
+print ("EKF OK?: %s" % vehicle.ekf_ok)
+print ("Last Heartbeat: %s" % vehicle.last_heartbeat)
+#print ("Rangefinder: %s" % vehicle.rangefinder)
+#print ("Rangefinder distance: %s" % vehicle.rangefinder.distance)
+#print ("Rangefinder voltage: %s" % vehicle.rangefinder.voltage)
+print ("Heading: %s" % vehicle.heading)
+print ("Is Armable?: %s" % vehicle.is_armable)
+print ("System status: %s" % vehicle.system_status.state)
+print ("Mode: %s" % vehicle.mode.name) # settable
+print ("Armed: %s" % vehicle.armed) # settable
 
 def get_location_metres(original_location, dNorth, dEast):
     """
