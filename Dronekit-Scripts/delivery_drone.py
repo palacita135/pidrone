@@ -31,7 +31,7 @@ if not connection_string:
 
 
 # Connect to the Vehicle
-print('Connecting to vehicle on: %s' % connection_string)
+print('Connecting to pidrone on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
