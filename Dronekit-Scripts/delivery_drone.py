@@ -3,7 +3,7 @@
 
 """
 © Copyright 2021, LaBru Systems.
-drone_cargo.py Multorotor scripts
+drone_cargo.py Multirotor scripts
 """
 
 from __future__ import print_function
@@ -12,13 +12,11 @@ from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGloba
 from pymavlink import mavutil
 import time
 import math
-import numpy as np 
 import psutil
-import copy 
 
 #Set up option parsing to get connection string
 import argparse  
-parser = argparse.ArgumentParser(description='Demonstrates basic mission operations.')
+parser = argparse.ArgumentParser(description='Delivery Drone using Multirotor.')
 parser.add_argument('--connect', default='127.0.0.1:14550')
 args = parser.parse_args()
 
@@ -41,7 +39,6 @@ vehicle = connect(connection_string, wait_ready=True)
 #LOG_BACKEND_TYPE = 3 if you are using APSync to stream the dataflash log files to the RPi
 # vehicle is an instance of the Vehicle class
 print ("Autopilot Firmware version: %s" % vehicle.version)
-#print ("Autopilot capabilities (supports ftp): %s" % vehicle.capabilities.ftp)
 print ("Global Location: %s" % vehicle.location.global_frame)
 print ("Global Location (relative altitude): %s" % vehicle.location.global_relative_frame)
 print ("Local Location: %s" % vehicle.location.local_frame) #NED
@@ -50,13 +47,9 @@ print ("Velocity: %s" % vehicle.velocity)
 print ("GPS: %s" % vehicle.gps_0)
 print ("Groundspeed: %s" % vehicle.groundspeed)
 print ("Airspeed: %s" % vehicle.airspeed)
-#print ("Gimbal status: %s" % vehicle.gimbal)
 print ("Battery: %s" % vehicle.battery)
 print ("EKF OK?: %s" % vehicle.ekf_ok)
 print ("Last Heartbeat: %s" % vehicle.last_heartbeat)
-#print ("Rangefinder: %s" % vehicle.rangefinder)
-#print ("Rangefinder distance: %s" % vehicle.rangefinder.distance)
-#print ("Rangefinder voltage: %s" % vehicle.rangefinder.voltage)
 print ("Heading: %s" % vehicle.heading)
 print ("Is Armable?: %s" % vehicle.is_armable)
 print ("System status: %s" % vehicle.system_status.state)
@@ -148,12 +141,12 @@ def adds_locations(aLocation): #target locations
     point1 = LocationGlobalRelative(-35.36357529, 149.16338038, 10)
     point2 = LocationGlobalRelative(-35.36141183, 149.16321976, 10)
     point3 = LocationGlobalRelative(-35.36158468, 149.16399057, 10)
-    
+   
     #cmds.add(command(0, 0, 0, target component,seq,frame,command,current,autocontionue,param1,param2,param3,param4                 ,     x     ,     y     ,z ))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point1.lat, point1.lon, 10)) #angka terakhir altitude target
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point2.lat, point2.lon, 10))
     cmds.add(Command( 0, 0, 0, mavutil.mavlink.MAV_FRAME_GLOBAL_RELATIVE_ALT, mavutil.mavlink.MAV_CMD_NAV_WAYPOINT, 0, 0, 0, 0, 0, 0, point3.lat, point3.lon, 10))
-    
+   
     print("Upload new commands to vehicle")
     cmds.upload()
 
@@ -180,7 +173,7 @@ def arm_and_takeoff(aTargetAltitude):
         print("Waiting For Arming...")
         time.sleep(1)
 
-    print("Taking Off!!!")
+    print("Taking Off")
     vehicle.simple_takeoff(aTargetAltitude) # Take off to target altitude
 
     # Wait until the vehicle reaches a safe height before processing the goto (otherwise the command 
@@ -206,8 +199,8 @@ print ("Take Off Complete")
 print ("Set Target airspeed to 7")
 vehicle.airspeed = 7
 
-for i in range(5, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
-    time.sleep(1) #selang waktu 5 sampe 1
+for i in range(5, -1, -1): #counting down hover time before do mission
+    time.sleep(1) #5sec
     print('Count To Go: '+ str(i))
 
 print('Fly')
@@ -229,7 +222,7 @@ while True:
     nextwaypoint=vehicle.commands.next
     print('Distance to waypoint (%s): %s Altitude: %s' % (nextwaypoint, distance_to_current_waypoint(), vehicle.location.global_relative_frame.alt))
     time.sleep(1)
-    if vehicle.commands.next==3: #dummy waypoint untuk turun deket point 2
+    if vehicle.commands.next==3: #dummy waypoint for landing near waypoint 2
         print('Land and Drop')
         break
 
@@ -261,8 +254,8 @@ vehicle.send_mavlink(msg)
 
 #----------------------------------misi 2-----------------------------------#
 
-for i in range(10, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
-    time.sleep(1) #selang waktu 5 sampe 1
+for i in range(10, -1, -1): #counting down time in ground before take off
+    time.sleep(1) #10sec
     print('Count To Take Off: '+ str(i))
 
 arm_and_takeoff(10)
@@ -272,8 +265,8 @@ print ("Take Off Complete")
 print ("Set Target airspeed to 7")
 vehicle.airspeed = 7
 
-for i in range(5, -1, -1): #hitung mundur/hover (waktu, detik keberapa beresnya, pengurangan waktu)
-    time.sleep(1) #selang waktu 5 sampe 1
+for i in range(5, -1, -1): #counting down hover time before do mission
+    time.sleep(1) #5sec
     print('Count To Go: '+ str(i))
 
 print('Fly')
@@ -284,7 +277,7 @@ vehicle.mode = VehicleMode("SMART_RTL") #default altitude rtl 15m
 while True:
     vehicle.location.global_relative_frame.alt is not 0.5
     print("Return to home, Altitude: %s" % vehicle.location.global_relative_frame.alt)
-    if vehicle.location.global_relative_frame.alt <= 0.5 : #patokan untuk menuju vehicle.close
+    if vehicle.location.global_relative_frame.alt <= 0.5 : #point to vehicle.close
         print("Landed")
         print("DISARMING MOTORS")
         break
