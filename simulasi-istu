@@ -2,7 +2,7 @@ MAP AND CONSOLE SIMULATION
 step 1 terminal 1
 sim_vehicle.py -v ArduCopter --map --console (multirotor)
 sim_vehicle.py -v ArduPlane --map --console (fixed wing)
-sim_vehicle.py -j4 -f quadplane --console --map (VTOL)
+#sim_vehicle.py -v quadplane --map --console (VTOL)
 sim_vehicle.py -v ArduSub --map --console (Sub - perahu)
 sim_vehicle.py -v APMrover2 --map --console (rover - mobil)
 
