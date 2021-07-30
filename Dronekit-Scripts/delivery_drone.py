@@ -31,7 +31,7 @@ if not connection_string:
     connection_string = sitl.connection_string()
 
 # Connect to the Vehicle
-print('Connecting to vehicle on: %s' % connection_string)
+print('Connecting to pidrone on: %s' % connection_string)
 vehicle = connect(connection_string, wait_ready=True)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
@@ -63,7 +63,7 @@ def get_location_metres(original_location, dNorth, dEast):
     as `original_location`.
     The function is useful when you want to move the vehicle around specifying locations relative to 
     the current vehicle position.
-    The algorithm is relatively accurate over small distances (10m within 1km) except close to the poles.
+    The algorithm is relatively accurate over small distancesecho 'export GAZEBO_MODEL_PATH=~/gazebo_ws/gazebo_models:${GAZEBO_MODEL_PATH}' >> ~/.bashrc (10m within 1km) except close to the poles.
     For more information see:
     http://gis.stackexchange.com/questions/2951/algorithm-for-offsetting-a-latitude-longitude-by-some-amount-of-meters
     """
@@ -164,7 +164,7 @@ def arm_and_takeoff(aTargetAltitude):
 
         
     print("Arming Motors")
-    # VTOL should arm in QLOITER mode
+    # Drone should arm in GUIDED mode
     print("Switch mode To GUIDED")
     vehicle.mode = VehicleMode("GUIDED")
     vehicle.armed = True
@@ -186,7 +186,7 @@ def arm_and_takeoff(aTargetAltitude):
         time.sleep(1)
 
         
-print('Create a new mission (for current location)')
+print("Create a new mission for current location")
 adds_locations(vehicle.location.global_frame)
 
 #-----------------------------------misi 1---------------------------#
@@ -199,11 +199,11 @@ print ("Take Off Complete")
 print ("Set Target airspeed to 7")
 vehicle.airspeed = 7
 
-for i in range(5, -1, -1): #counting down hover time before do mission
-    time.sleep(1) #5sec
+for i in range(3, -1, -1): #counting down hover time before do mission
+    time.sleep(1) #3sec
     print('Count To Go: '+ str(i))
 
-print('Fly')
+print("Fly")
 
 print("Starting Mission 1")
 # Reset mission set to first (0) waypoint
@@ -234,7 +234,7 @@ while True:
     time.sleep(1)
     if vehicle.location.global_relative_frame.alt <= 1:
         vehicle.mode = VehicleMode("ALT_HOLD")
-        print("Landed, Drop and wait 10s Before Take Off")
+        print("Landed, Drop and wait 5s Before Take Off")
         break
 
 #To control a servo, plug it into an empty channel on the pixhawk and use
@@ -251,11 +251,10 @@ mavutil.mavlink.MAV_CMD_DO_SET_SERVO, #command
 # send command to vehicle
 print("Release Package Drop")
 vehicle.send_mavlink(msg)
-
 #----------------------------------misi 2-----------------------------------#
 
-for i in range(10, -1, -1): #counting down time in ground before take off
-    time.sleep(1) #10sec
+for i in range(5, -1, -1): #counting down time in ground before take off
+    time.sleep(1) #5sec
     print('Count To Take Off: '+ str(i))
 
 arm_and_takeoff(10)
@@ -265,8 +264,8 @@ print ("Take Off Complete")
 print ("Set Target airspeed to 7")
 vehicle.airspeed = 7
 
-for i in range(5, -1, -1): #counting down hover time before do mission
-    time.sleep(1) #5sec
+for i in range(3, -1, -1): #counting down hover time before do mission
+    time.sleep(1) #3sec
     print('Count To Go: '+ str(i))
 
 print('Fly')
