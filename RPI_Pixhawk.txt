@@ -91,6 +91,29 @@ sudo pip install mavproxy
 sudo pip install dronekit
 sudo pip install dronekit-sitl
 
+sudo apt update
+sudo apt install build-essential manpages-dev git
+sudo apt-get install python3-dev python3-pip
+sudo update-alternatives —install /usr/bin/python python /usr/bin/python3 10
+sudo apt-get install python3-opencv python3-wxgtk4.0 python3-matplotlib python3-lxml python3-pygame
+pip3 install PyYAML mavproxy --user
+echo "export PATH=$PATH:$HOME/.local/bin" >> ~/.bashrc
+cd $courseRoot
+mkdir apm
+cd apm
+git clone -b Copter-4.0.7 https://github.com/ArduPilot/ardupilot
+
+$ pip3 freeze | grep -i mav
+MAVProxy==1.8.34
+pymavlink==2.4.14
+
+pip3 freeze | grep -i drone
+dronekit==2.9.2
+dronekit-sitl==3.3.0
+
+ubuntu 20.04
+pip3 install pymavlink==2.4.8
+
 mavproxy.py --master=/dev/ttyAMA0
 python (filename) --connect /dev/ttyAMA0
 
