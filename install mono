@@ -1,1 +1,21 @@
+instruction on Mission Planners GitHub page is a little bit outdated for newer Ubuntu (in this case 20.04)
+
+in newer Ubuntu ‘libmono-winforms2.0-cil’ and ‘libmono-corlib2.0-cil’ replaced by ‘libmono-system-windows-forms4.0-cil’
+
+to install mission planner on Ubuntu 20.04 :
+
+first install dependecies by executing :
+
+    sudo apt install mono-runtime libmono-system-windows-forms4.0-cil libmono-system-core4.0-cil libmono-system-management4.0-cil libmono-system-xml-linq4.0-cil
+
+then
+
+    sudo apt install mono-complete
+
+Get the lastest zipped version of Mission Planner here : https://firmware.ardupilot.org/Tools/MissionPlanner/MissionPlanner-latest.zip 320
+
+Unzip in the directory you want
+Go into the directory
+run with mono MissionPlanner.exe
+
 https://www.mono-project.com/download/stable/
