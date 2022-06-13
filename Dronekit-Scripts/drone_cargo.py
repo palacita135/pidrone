@@ -17,7 +17,7 @@ import psutil
 #Set up option parsing to get connection string
 import argparse  
 parser = argparse.ArgumentParser(description='Delivery Drone using Multirotor.')
-parser.add_argument('--connect', default='127.0.0.1:14550')
+parser.add_argument('--connect', default='/dev/ttyAMA0')
 args = parser.parse_args()
 
 connection_string = args.connect
@@ -32,7 +32,7 @@ if not connection_string:
 
 # Connect to the Vehicle
 print('Connecting to pidrone on: %s' % connection_string)
-vehicle = connect(connection_string, wait_ready=True)
+vehicle = connect('/dev/ttyAM0, wait_ready=True, baud=57600)
 #57600 is the baudrate that you have set in the mission plannar or qgc
 #SERIAL2_PROTOCOL = 2 (the default) to enable MAVLink 2 on the serial port.
 #SERIAL2_BAUD = 57 so the flight controller can communicate with the RPi at 57600 baud.
