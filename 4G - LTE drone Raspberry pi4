@@ -129,8 +129,9 @@ cd proto/pb_plugins
 pip3 install -r requirements.txt
 cd ../..
 pip3 install -r requirements.txt -r requirements-dev.txt
-./other/tools/run_protoc.sh
+cd other/tools/run_protoc.sh
 export MAVSDK_SERVER_ARCH=<ARM embedded architecture>
+cd ../..
 python3 setup.py build
 pip3 install -e .
 pip3 install -r requirements-docs.txt
