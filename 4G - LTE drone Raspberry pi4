@@ -1,0 +1,225 @@
+# Install huawei e3372 Modem
+$ lsusb | grep Huawei
+12d1:1506 Huawei Technologies Co., Ltd. Modem/Networkcard
+
+$ dmesg | grep 1506
+idVendor=12d1, idProduct=1506, bcdDevice= 1.02
+
+# Install wvdial
+sudo apt-get install wvdial
+sudo pico /etc/wvdial.conf
+# add this
+[Dialer Defaults]
+Init1 = ATZ
+Init2 = ATQ0 V1 E1 S0=0
+Modem Type = Analog Modem
+Baud = 9600
+New PPPD = yes
+Modem = /dev/ttyUSB0
+ISDN = 0
+Phone = *99#
+Password = internet
+Username = internet
+Stupid Mode = on
+
+# Testing the dial up
+sudo wvdial
+
+# Create the service
+sudo pico /etc/systemd/system/wvdial.service
+# add this
+[Unit]
+Description=wvdial
+
+[Service]
+ExecStart=/usr/bin/wvdial
+Restart=on-failure
+RestartSec=5
+
+sudo pico /etc/udev/rules.d/99-com.rules
+# add this
+SUBSYSTEM=="tty", KERNEL=="ttyUSB0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="wvdial.service"
+
+# Testing the connection
+ifconfig
+
+================================================================================================================================
+
+# Install Zerotier
+https://bellergy.com/4-install-zerotier/
+
+================================================================================================================================
+
+# Install and setup mavlink-router (connecting drone to ground station)
+sudo apt update
+sudo apt install git
+
+git clone https://github.com/intel/mavlink-router.git
+cd mavlink-router
+git submodule update --init --recursive
+sudo apt install git meson ninja-build pkg-config gcc g++ systemd
+
+sudo pip3 install meson
+meson setup build .
+ninja -C build
+
+sudo mkdir /etc/mavlink-router
+cd /etc/mavlink-router
+sudo pico main.conf
+# add this
+[General]
+   TcpServerPort=5760
+   ReportStats=false
+   MavlinkDialect=common
+
+[UartEndpoint serial0]
+   Device=/dev/serial0
+   Baud=38400
+
+[UdpEndpoint local]
+   Mode=normal
+   Address=127.0.0.1
+   Port=14550
+   
+   # Run
+   mavlink-routerd -e (GCS IP):14550
+   
+   sudo pico /etc/systemd/system/mavlink-router.service
+   # add this
+   [Unit]
+Description=MAVLink Router
+Wants=zerotier-one.service
+After=network-online.target zerotier-one.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/mavlink-routerd -e {groundstation}:14550
+Restart=on-failure
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+
+# Start the service
+sudo systemctl start mavlink-router.service
+
+# View the log
+sudo journalctl -u mavlink-router.service
+
+# Enable the service
+sudo systemctl enable mavlink-router.service
+
+# Check the status
+systemctl status mavlink-router.service
+
+==============================================================================================================================
+
+# Set up video streaming
+sudo apt-get update
+sudo apt-get install gstreamer1.0-tools gstreamer1.0-plugins-good gstreamer1.0-plugins-bad
+
+raspivid -n -w 640 -h 360 -b 1000000 -fps 15 --flush --timeout 0 -o - | gst-launch-1.0 -v fdsrc ! h264parse ! rtph264pay config-interval=10 pt=96 ! udpsink host={ground-station_ip} port=5600
+
+gst-launch-1.0 -v udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' ! rtph264depay ! avdec_h264 ! videoconvert ! autovideosink sync=f
+
+pip3 install mavsdk
+git clone https://github.com/mavlink/MAVSDK-Python --recursive
+cd MAVSDK-Python
+cd proto/pb_plugins
+pip3 install -r requirements.txt
+cd ../..
+pip3 install -r requirements.txt -r requirements-dev.txt
+./other/tools/run_protoc.sh
+export MAVSDK_SERVER_ARCH=<ARM embedded architecture>
+python3 setup.py build
+pip3 install -e .
+pip3 install -r requirements-docs.txt
+make -C mavsdk html
+
+# save this file stream.sh
+#!/bin/bash
+
+NOW=$(date +"%Y%m%d-%H%M")
+VIDEO_FILE=/home/pi/video-stream/videos/$NOW-livecam.h264
+UDP_IP=192.168.192.101 # The receiver IP
+UDP_PORT=5600
+
+/usr/bin/raspivid -n -w 640 -h 360 -b 1000000 -fps 15 --flush --timeout 0 -o - | \
+tee $VIDEO_FILE | \
+/usr/bin/gst-launch-1.0 -v fdsrc ! \
+h264parse ! rtph264pay config-interval=10 pt=96 ! \
+udpsink host=$UDP_IP port=$UDP_PORT
+
+#save this file controller.py
+#!/usr/bin/env python3
+
+# When drone armed, start the video streaming
+# when disarmed, kill the video streaming
+
+import os, subprocess, psutil
+import asyncio
+from mavsdk import System, telemetry
+
+def kill(proc_pid):
+    process = psutil.Process(proc_pid)
+    for proc in process.children(recursive=True):
+        proc.kill()
+    process.kill()
+
+async def run():
+
+    # Init the drone
+    drone = System()
+    print("Waiting for drone to connect...")
+    await drone.connect(system_address="udp://:14550")
+
+    video_streaming = False
+
+    async for state in drone.core.connection_state():
+        if state.is_connected:
+            print(state)
+            break
+
+    async for is_armed in drone.telemetry.armed():
+        if is_armed:
+            if video_streaming == False:
+                print("Armed")
+                # Start video stream process
+                video_streaming = True
+                proc = subprocess.Popen("/home/pi/video-stream/stream.sh", shell=True)
+                print("Video Streaming Start")
+        else:
+            if video_streaming:
+                print("Disarmed")
+                # Kill video stream process
+                video_streaming = False
+                try:
+                    kill(proc.pid)
+                    print("Video Streaming Stop")
+                except:
+                    print("Loop")
+
+        await asyncio.sleep(1)
+
+if __name__ == "__main__":
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run())
+    
+# I assume you save the files to /home/pi/video-stream/
+# Change the files to executable:
+cd /home/pi/video-stream/
+chmod u+x stream.sh
+chmod u+x controller.py
+
+mkdir videos
+
+sudo pip install mavsdk psutil
+
+# RUN THE SCRIPT
+sudo python controller.py
+
+# START THE CONTROLLER.PY WHEN SYSTEM BOOT
+# I need the controller.py auto start when the system boot. I added this line to the /ect/rc.local. It is my rc.local file.
+
+# Strat video-control
+/usr/bin/python /home/pi/video-stream/controller.py
