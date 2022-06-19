@@ -84,7 +84,7 @@ sudo pip install future pymavlink MAVProxy python3-future libtool autoconf
 #sudo apt install python3-future
 #sudo apt install libtool
 #sudo apt install autoconf
-sudo apt-get update && sudo apt-get disk-upgrade -y
+sudo apt-get update && sudo apt-get dist-upgrade -y
 #sudo apt-get upgrade
 sudo pip install pymavlink mavproxy dronekit dronekit-sitl
 #sudo pip install mavproxy
