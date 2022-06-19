@@ -79,17 +79,18 @@ pip3 install mavproxy --user --upgrade
 pip3 install mavproxy --user git+https://github.com/ArduPilot/mavproxy.git@master
 
 #DRONEKIT
-sudo pip install future pymavlink MAVProxy
-sudo apt install python-future
-sudo apt install python3-future
-sudo apt install libtool
-sudo apt install autoconf
-sudo apt-get update
-sudo apt-get upgrade
-sudo pip install pymavlink
-sudo pip install mavproxy
-sudo pip install dronekit
-sudo pip install dronekit-sitl
+sudo pip install future pymavlink MAVProxy python3-future libtool autoconf
+#sudo apt install python-future
+#sudo apt install python3-future
+#sudo apt install libtool
+#sudo apt install autoconf
+sudo apt-get update && sudo apt-get disk-upgrade -y
+#sudo apt-get upgrade
+sudo pip install pymavlink mavproxy dronekit dronekit-sitl
+#sudo pip install mavproxy
+#sudo pip install dronekit
+#sudo pip install dronekit-sitl
+sudo apt autoremove -y && sudo apt autoclean
 
 sudo apt update
 sudo apt install build-essential manpages-dev git
