@@ -6,12 +6,15 @@ $ dmesg | grep 1506
 idVendor=12d1, idProduct=1506, bcdDevice= 1.02
 
 # Install wvdial
-sudo apt-get install wvdial
+sudo apt-get install ppp usb-modeswitch wvdial
+
+# Make script
 sudo pico /etc/wvdial.conf
 # add this
 [Dialer Defaults]
 Init1 = ATZ
 Init2 = ATQ0 V1 E1 S0=0
+Init3 = AT+CGDCONT=1,"198.168.8.100","Telkomsel"
 Modem Type = Analog Modem
 Baud = 9600
 New PPPD = yes
@@ -20,7 +23,7 @@ ISDN = 0
 Phone = *99#
 Password = internet
 Username = internet
-Stupid Mode = on
+Stupid Mode = 1
 
 # Testing the dial up
 sudo wvdial
@@ -36,6 +39,7 @@ ExecStart=/usr/bin/wvdial
 Restart=on-failure
 RestartSec=5
 
+# Create the service
 sudo pico /etc/udev/rules.d/99-com.rules
 # add this
 SUBSYSTEM=="tty", KERNEL=="ttyUSB0", TAG+="systemd", ENV{SYSTEMD_WANTS}+="wvdial.service"
