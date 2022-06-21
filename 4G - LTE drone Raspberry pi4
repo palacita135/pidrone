@@ -129,14 +129,14 @@ raspivid -n -w 640 -h 360 -b 1000000 -fps 15 --flush --timeout 0 -o - | gst-laun
 gst-launch-1.0 -v udpsrc port=5600 caps='application/x-rtp, media=(string)video, clock-rate=(int)90000, encoding-name=(string)H264' ! rtph264depay ! avdec_h264 ! videoconvert ! autovideosink sync=f
 
 pip3 install mavsdk
-git clone https://github.com/mavlink/MAVSDK-Python --recursive
+mkdir MAVSDK-Pyton
 cd MAVSDK-Python
+git clone https://github.com/mavlink/MAVSDK-Python --recursive
 cd proto/pb_plugins
 pip3 install -r requirements.txt
 cd ../..
 pip3 install -r requirements.txt -r requirements-dev.txt
-cd other/tools/
-./run_protoc.sh
+cd other/tools/run_protoc.sh
 export MAVSDK_SERVER_ARCH=<ARM embedded architecture>
 cd ../..
 python3 setup.py build
