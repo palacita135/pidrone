@@ -37,6 +37,117 @@ Under Settings, check the Enabled box and save. Under Shares, select Create, add
 
 Your NAS system should now be ready to use.
 
+# Steps to Install Docker Compose on Raspberry Pi;
+Assign the .local Domain to Your Raspberry Pi
+Assign your Raspberry Pi a .local domain if you use it to host on your network. A .local domain enables you to access your Pi using a simple web address. With the .local domain, you don’t have to remember the IP address.
+
+To create a .local domain, install Avahi Daemon on your Pi;
+
+sudo apt-get install avahi-daemon
+Once complete, you don’t need to reboot the device. Raspberry Pi will begin to recognize local network queries for its hostname. By default, the hostname is raspberrypi.
+
+Install git
+Install git as you will need it later.
+
+sudo apt install git-
+Upgrade Packages
+
+Update your package list with the command:
+‍Sudo apt update
+Check installed packages to upgrade:
+‍apt list --upgradable
+Upgrade packages to latest version:
+‍Sudo apt full-upgrade
+‍
+
+3. Install Docker
+You can install Docker using the convenience script offered at get.docker.com. 
+
+Download and install Docker script 
+To do this, run the command; 
+curl -fsSL https://get.docker.com -o get-docker.sh
+
+Whenever you download scripts from the internet, examine them before running locally.
+
+Run the Docker install script
+Execute installation script through;
+
+‍Sudo sh get-docker.sh
+‍
+
+4. Include a Non-Root Account to the Docker Group
+Automatically, only root users or those with administrative privileges can run the containers. If you are logged out as the root, you can utilize the sudo prefix. 
+
+To execute docker commands and avoid typing the sudo each time, you can also add on-root users to the docker group.
+
+The syntax to add more accounts to the Docker group is:
+
+‍sudo usermod -aG docker ${USER}
+To enhance the permissions to the existing user run:
+
+sudo usermod -aG docker ${USER}
+Check whether it’s running:
+
+groups ${USER}
+‍
+
+5. Log Out then Back In
+If you run the command in (c) above, reboot Raspberry Pi for changes to get applied. Alternatively, you can run the command;
+
+‍sudo su - ${USER}
+‍
+
+6. Test Docker
+ To confirm that Docker installed correctly, take a look at the Docker version. 
+
+Run the command by typing; ‍
+
+docker version. 
+The output will show the Docker version and some extra information. If you'd like information about the whole system, that is, the kernel version, number of containers and images, and a more comprehensive description, type:
+
+‍docker info
+Alternatively, you can run the hello-world image. The best way to test whether the Docker setup is correct is to run the Hello World container. 
+
+You can do this by typing the command: ‍
+
+docker run hello-world
+The software will get in touch with the Docker daemon, pull the “hello-world” image, and generate a new container depending on that image.
+
+After completing all the steps, the output should let you know that your installation appears to be working correctly.
+
+To remove the image:
+
+docker image rm hello-world
+‍
+
+7. Install Docker-Compose
+You can install Docker Compose from pre-built binaries that you download from the release page for the project. 
+
+To install Docker-Compose, you’ll need to use pip3. Therefore, you need to install python 3 and pip3. If it’s not present, execute the following commands;
+
+sudo apt-get install libffi-dev libssl-dev
+sudo apt install python3-dev
+sudo apt-get install -y python3 python3-pip
+With pip3 and python3 installed, it’s possible to install Docker-Compose via the command;
+
+‍sudo pip3 install docker-compose
+8. Allow the Docker System Service to Launch your Containers on Boot
+
+Since it’s a great and crucial addition, you can customize your Raspberry Pi to run the service with the Docker system automatically when it starts up. 
+
+Use the command
+
+‍sudo systemctl to enable Docker
+‍ to run the Docker anytime it boots up. Containers with a relaunch policy set to unless-stopped or always automatically restart following a reboot.
+
+Sample Docker Compose file
+
+Here is an example of a Docker – Compose file that launches three containers. When started, the containers will come up automatically when the Raspberry Pi gets full power cycled. 
+
+Run this command to start the containers using Docker-Compose; docker-compose -f docker-compose.yaml up -d
+
+Go to Docker Speed Test project  HYPERLINK "https://github.com/robinmanuelthiel/speedtest" on GitHub to learn more about this sample.
+
 ==============================================================================================================================================================
 
 https://www.pcmag.com/how-to/how-to-turn-a-raspberry-pi-into-a-nas-for-whole-home-file-sharing
