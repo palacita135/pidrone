@@ -15,24 +15,12 @@ Password: openmediavault
 
 # Set up network access
 # Select Storage and then Disks. All your attached storage, including the SD card, should show. If not, double-check everything is plugged in correctly and reboot the system.
-
-# A screenshot of OpenMediaVault open in a browser window. The Storage and Disks menu is displayed. 
 # Next, navigate to Storage and File Systems. You likely won’t see anything here, so select Create. Here, you can select your storage device. We recommend selecting EXT4 for the drive format. Select OK and close.
-
-# A screenshot of OpenMediaVault open in a browser window. The Storage and Disks menu is displayed
 # Select the file system to mount it and apply changes.
-
-# A screenshot of OpenMediaVault open in a browser window. The Storage and Disks menu is displayed
 # Now, we need to create a shared folder. 
-
-# A screenshot of OpenMediaVault open in a browser window. The Storage and Disks menu is displayed
 # Navigate to Storage and Shared Folders and select Create. Here you can name the folder, select which drive it should exist on, and grant permissions to users. By default, the permissions should be correct, but you can tweak them if you prefer a different option for your network preferences. Save and apply changes.
-
 # Lastly, we need to make sure computers on your network can find the folder. 
-
 # Navigate to Services and select SMB/CIFS.
-
-# A screenshot of OpenMediaVault open in a browser window. The Storage and Shared Folders menu is displayed
 # Under Settings, check the Enabled box and save. Under Shares, select Create, add your shared folder, and save.
 
 # Your NAS system should now be ready to use.
