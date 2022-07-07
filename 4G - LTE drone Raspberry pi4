@@ -61,6 +61,11 @@ ifconfig
 # Install Zerotier
 https://bellergy.com/4-install-zerotier/
 
+curl -s https://install.zerotier.com | sudo bash
+sudo zerotier-cli status
+sudo systemctl enable zerotier-one
+sudo zerotier-cli join 6e15a3858c201857
+
 # ID 632ea29085f56cf4
 
 ================================================================================================================================
