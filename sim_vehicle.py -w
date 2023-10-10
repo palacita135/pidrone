@@ -1,3 +1,5 @@
+ntren24
+
 git clone https://github.com/ArduPilot/ardupilot.git
 cd ardupilot
 git checkout Copter-3.6 git checkout Plane-4.4
