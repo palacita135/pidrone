@@ -7,6 +7,9 @@ git submodule update --init --recursive
 sudo apt install python-matplotlib python-serial python-wxgtk3.0 python-wxtools python-lxml python-scipy python-opencv ccache gawk python-pip python-pexpect
 sudo pip install future pymavlink MAVProxy
 
+Tools/environment_install/install-prereqs-ubuntu.sh -y
+. ~/.profile
+
 gedit ~/.bashrc
 
 Add this lines at the end of bashrc file
