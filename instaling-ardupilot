@@ -1,5 +1,4 @@
-git clone https://github.com/ArduPilot/ardupilot.git
-
+git clone --recursive https://github.com/ArduPilot/ardupilot.git
 cd ardupilot
 git checkout Copter-4.4.1
 git submodule update --init --recursive
@@ -9,6 +8,29 @@ sudo pip install future pymavlink MAVProxy
 
 Tools/environment_install/install-prereqs-ubuntu.sh -y
 . ~/.profile
+
+Here are some commands to configure waf for commonly used boards:
+
+./waf configure --board bebop --static # Bebop or Bebop2
+./waf configure --board edge           # emlid edge
+./waf configure --board fmuv3          # 3DR Pixhawk 2 boards
+./waf configure --board navio2         # emlid navio2
+./waf configure --board Pixhawk1       # Pixhawk1
+./waf configure --board CubeBlack      # Hex/ProfiCNC Cube Black (formerly known as Pixhawk 2.1)
+./waf configure --board Pixracer       # Pixracer
+./waf configure --board skyviper-v2450 # SkyRocket's SkyViper GPS drone using ChibiOS
+./waf configure --board sitl           # software-in-the-loop simulator
+./waf configure --board sitl --debug   # software-in-the-loop simulator with debug symbols
+List of available vehicle types
+
+Here is a list of the most common vehicle build targets:
+
+./waf copter                            # All multirotor types
+./waf heli                              # Helicopter types
+./waf plane                             # Fixed wing airplanes including VTOL
+./waf rover                             # Ground-based rovers and surface boats
+./waf sub                               # ROV and other submarines
+./waf antennatracker                    # Antenna trackers
 
 gedit ~/.bashrc
 
