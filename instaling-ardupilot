@@ -37,6 +37,8 @@ Here is a list of the most common vehicle build targets:
 ./waf sub                               # ROV and other submarines
 ./waf antennatracker                    # Antenna trackers
 
+ONLY if you get error from "Tools/environment_install/install-prereqs-ubuntu.sh -y"
+Run :
 gedit ~/.bashrc
 
 Add this lines at the end of bashrc file
