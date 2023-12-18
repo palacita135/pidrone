@@ -14,6 +14,8 @@ sudo pip install future pymavlink MAVProxy
 Tools/environment_install/install-prereqs-ubuntu.sh -y
 . ~/.profile
 
+./Tools/gittools/submodule-sync.sh
+
 Here are some commands to configure waf for commonly used boards:
 
 ./waf configure --board bebop --static # Bebop or Bebop2
