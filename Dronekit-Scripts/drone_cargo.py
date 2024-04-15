@@ -5,13 +5,17 @@
 © Copyright 2021, LaBru Systems.
 drone_cargo.py Multirotor scripts
 """
-
+import sys
+if sys.version_info.major == 3 and sys.version_info.minor >= 10:
+    import collections
+    from collections.abc import MutableMapping
+    setattr(collections, "MutableMapping", MutableMapping)
+    
 from __future__ import print_function
-
 from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal, Command
 from pymavlink import mavutil
-import dronekit_python310_compat
-import dronekit
+#import dronekit_python310_compat
+#import dronekit
 import time
 import math
 import psutil
