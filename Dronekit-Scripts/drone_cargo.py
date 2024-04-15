@@ -10,6 +10,8 @@ from __future__ import print_function
 
 from dronekit import connect, VehicleMode, LocationGlobalRelative, LocationGlobal, Command
 from pymavlink import mavutil
+import dronekit_python310_compat
+import dronekit
 import time
 import math
 import psutil
